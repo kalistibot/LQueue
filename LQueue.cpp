@@ -1,4 +1,7 @@
 /*--- LQueue.cpp ----------------------------------------------------------
+ 
+                    Aaron Paul  COSC2436  03/04/16
+
              This file implements LQueue member functions.
 -------------------------------------------------------------------------*/
  
@@ -9,104 +12,72 @@ using namespace std;
 
 //--- Definition of Queue constructor
 Queue::Queue()
-: myFront(0), myBack(0)
+: last(0)
 {}
+//--- Queue class has no copy constructor
+// Queue::Queue(const Queue & original){}
 
-//--- Definition of Queue copy constructor
-Queue::Queue(const Queue & original)
-{
-   myFront = myBack = 0;
-   if (!original.empty())
-   {
-      // Copy first node
-      myFront = myBack = new Queue::Node(original.front());
+//--- Queue class has no assignment operator
+// const Queue & Queue::operator=(const Queue & rightHandSide){}
 
-      // Set pointer to run through original's linked list
-      Queue::NodePointer origPtr = original.myFront->next;
-      while (origPtr != 0)
-      {
-         myBack->next = new Queue::Node(origPtr->data);
-         myBack = myBack->next;
-         origPtr = origPtr->next;
-      }
-   }
-}
+
 
 //--- Definition of Queue destructor
 Queue::~Queue()
 { 
   // Set pointer to run through the queue
-  Queue::NodePointer prev = myFront,
+  Queue::NodePointer prev = last,
                      ptr;
-  while (prev != 0)
-    {
+  
+    do{
       ptr = prev->next;
       delete prev;
       prev = ptr;
-    }
-}
-
-//--- Definition of assignment operator
-const Queue & Queue::operator=(const Queue & rightHandSide)
-{
-   if (this != &rightHandSide)         // check that not q = q
-   {
-      this->~Queue();                  // destroy current linked list
-      if (rightHandSide.empty())       // empty queue
-         myFront = myBack = 0;
-      else
-      {                                // copy rightHandSide's list
-         // Copy first node
-         myFront = myBack = new Queue::Node(rightHandSide.front());
-
-         // Set pointer to run through rightHandSide's linked list
-         Queue::NodePointer rhsPtr = rightHandSide.myFront->next;
-         while (rhsPtr != 0)
-         {
-           myBack->next = new Queue::Node(rhsPtr->data);
-           myBack = myBack->next;
-           rhsPtr = rhsPtr->next;
-         }
-      }
-   }
-   return *this;
+    }while (prev != last);
 }
 
 //--- Definition of empty()
-bool Queue::empty() const
-{ 
-   return (myFront == 0); 
+bool Queue::empty() const{
+   return (last == 0);
 }
 
 //--- Definition of enqueue()
-void Queue::enqueue(const QueueElement & value)
-{
+void Queue::enqueue(const QueueElement & value){
    Queue::NodePointer newptr = new Queue::Node(value);
-   if (empty())
-      myFront = myBack = newptr;
-   else
-   {
-      myBack->next = newptr;
-      myBack = newptr;
+    if (empty()){
+        last = newptr;
+        last->next = newptr;
+    }else{
+       newptr->next = last->next;
+       last->next = newptr;
+       last = newptr;
    }
 }
 
 //--- Definition of display()
 void Queue::display(ostream & out) const
 {
-   Queue::NodePointer ptr;
-   for (ptr = myFront; ptr != 0; ptr = ptr->next)
-     out << ptr->data << "  ";
-   out << endl;
 
+    if (last->next==0) {
+        out<<"Queue Empty"<<endl;
+    }else{
+        Queue::NodePointer ptr = last;
+        do {
+            ptr = ptr->next;
+            out<< ptr->data<<endl;
+            } while (ptr !=last);
+    
+ 
+    }
 }
-
 //--- Definition of front()
 QueueElement Queue::front() const
 {
-   if (!empty())
-      return (myFront->data);
-   else
+    if (!empty()){
+       //Queue::NodePointer frontPtr = last->next;
+      return 	(last->data);
+    }
+    else
    {
       cerr << "*** Queue is empty "
               " -- returning garbage ***\n";
@@ -122,11 +93,11 @@ void Queue::dequeue()
 {
    if (!empty())
    {
-      Queue::NodePointer ptr = myFront;
-      myFront = myFront->next;
+      Queue::NodePointer ptr = last;
+      last = last->next;
       delete ptr;
-      if (myFront == 0)     // queue is now empty
-         myBack = 0;
+      if (last == 0)     // queue is now empty
+         last = 0;
    }   
    else
       cerr << "*** Queue is empty -- can't remove a value ***\n";

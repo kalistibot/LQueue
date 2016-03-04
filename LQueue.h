@@ -1,7 +1,8 @@
 
 /*-- LQueue.h -------------------------------------------------------------
-
-  This header file defines a Queue data type.
+Aaron Paul  COSC2436  03/04/16
+ 
+  This header file defines a Queue data type using a Circular Linked List.
   Basic operations:
     constructor:  Constructs an empty queue
     empty:        Checks if a queue is empty
@@ -9,6 +10,7 @@
     front:        Accesses the top queue value; leaves queue unchanged
     dequeue:      Modifies queue by removing the value at the front
     display:      Displays all the queue elements
+    There are no assignment or copy construtors.  These operations are not permitted
     Note: Execution terminates if memory isn't available for a queue element.
 ---------------------------------------------------------------------------*/
 
@@ -35,14 +37,9 @@ class Queue
   -----------------------------------------------------------------------*/
 
   Queue(const Queue & original);
-  /*-----------------------------------------------------------------------
-    Copy Constructor 
-
-    Precondition:  original is the queue to be copied and is received 
-        as a const reference parameter.
-    Postcondition: A copy of original has been constructed.
-  -----------------------------------------------------------------------*/
-
+    // the Queue class has no copy constructor
+    // Operations that require a copy constructor are not allowed
+    
  /***** Destructor *****/
   ~Queue(); 
   /*-----------------------------------------------------------------------
@@ -54,14 +51,8 @@ class Queue
 
  /***** Assignment *****/
  const Queue & operator= (const Queue & rightHandSide);
-  /*-----------------------------------------------------------------------
-    Assignment Operator 
-
-    Precondition:  rightHandSide is the queue to be assigned and is 
-        received as a const reference parameter.
-    Postcondition: The current queue becomes a copy of rightHandSide 
-        and a reference to it is returned.
-  -----------------------------------------------------------------------*/
+    // the Queue class has no assignment operator
+    // Assigning a Queue object to another Queue object is not allowed
 
   bool empty() const;
   /*-----------------------------------------------------------------------
@@ -109,28 +100,28 @@ class Queue
   -----------------------------------------------------------------------*/
 
  private:
+    
+
    /*** Node class ***/
    class Node
    {
     public:
-      QueueElement data;
-      Node * next;
+       QueueElement data;
+       Node * next;
       //--- Node constructor
-      Node(QueueElement value, Node * link = 0)
+       Node(QueueElement value, Node * link =0)
       /*-------------------------------------------------------------------
         Precondition:  value and link are received
         Postcondition: A Node has been constructed with value in its 
             data part and its next part set to link (default 0).
        ------------------------------------------------------------------*/
-      { data = value; next = link; }
+      { data = value; next = 0; }
 
   };
-
-  typedef Node * NodePointer;
-
-  /***** Data Members *****/
-  NodePointer myFront,      // pointer to front of queue
-              myBack;       // pointer to back of queue
+    typedef Node * NodePointer;
+    /***** Data Members *****/
+    NodePointer last;      // pointer to last node of queue
+    
 
 }; // end of class declaration
 

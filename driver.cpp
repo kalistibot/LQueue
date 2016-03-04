@@ -1,5 +1,10 @@
+
+
+
 /*---------------------------------------------------------------------
-                  Driver program to test the Queue class.
+
+    Aaron Paul  COSC2436  03/04/16
+    Driver program to test the LQueue class.
   ----------------------------------------------------------------------*/
 
 #include <iostream>
@@ -7,7 +12,7 @@ using namespace std;
 	
 #include "LQueue.h"
 
-void print(Queue q)
+void print(Queue &q) //pass by reference avoids copy constructor
 { q.display(cout); }
 
 int main()
@@ -22,25 +27,6 @@ int main()
       q1.enqueue(100*i);
 
    cout << "Contents of queue q1 (via  print):\n";
-   print(q1); cout << endl;
-
-   Queue q2;
-   q2 = q1;
-   cout << "Contents of queue q2 after q2 = q1 (via  print):\n";
-   print(q2); cout << endl;
-
-   cout << "Queue q2 empty? " << q2.empty() << endl;
-
-   cout << "Front value in q2: " << q2.front() << endl;
-
-   while (!q2.empty())
-   {
-     cout << "Remove front -- Queue contents: ";
-     q2.dequeue();
-     q2.display(cout);
-   }
-   cout << "Queue q2 empty? " << q2.empty() << endl;
-   cout << "Front value in q2?" << endl << q2.front() << endl;
-   cout << "Trying to remove front of q2: " << endl;
-   q2.dequeue();
+   
+      print(q1); cout << endl;
 }
